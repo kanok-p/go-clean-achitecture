@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/copier"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
+	"github.com/kanok-p/go-clean-achitecture/domain/response"
 	domainUsr "github.com/kanok-p/go-clean-achitecture/domain/users"
 )
 
@@ -23,18 +24,18 @@ type UpdateUsers struct {
 func (u USRService) Update(ctx context.Context, input *UpdateUsers) (users *domainUsr.Users, err error) {
 	data, err := u.usrRepo.Get(ctx, input.ID)
 	if err != nil {
-		return nil, err
+		return nil, response.Notfound(err)
 	}
 
 	users = domainUsr.Update()
 	if err = copier.Copy(users, &input); err != nil {
-		return nil, err
+		return nil, response.BadRequest(err)
 	}
 
 	users.CreatedAt = data.CreatedAt
 	err = u.usrRepo.Save(ctx, users)
 	if err != nil {
-		return nil, err
+		return nil, response.InternalServerError(err)
 	}
 
 	return users, nil

@@ -1,44 +1,32 @@
 package app
 
 import (
-	"net/http"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 
 	"github.com/kanok-p/go-clean-achitecture/app/inout"
-	errorStruct "github.com/kanok-p/go-clean-achitecture/domain/error"
+	"github.com/kanok-p/go-clean-achitecture/domain/response"
 	serviceUsr "github.com/kanok-p/go-clean-achitecture/service/users"
 )
 
 func (app *App) CreateUsers(ctx *gin.Context) {
 	input := inout.User{}
 	if err := ctx.ShouldBind(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorStruct.ResponseError{
-			Error: strconv.Itoa(http.StatusBadRequest),
-			Msg:   err.Error(),
-		})
+		response.Error(ctx, response.BadRequest(err))
 		return
 	}
 
 	users := &serviceUsr.CreateUsers{}
 	if err := copier.Copy(users, &input); err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorStruct.ResponseError{
-			Error: strconv.Itoa(http.StatusInternalServerError),
-			Msg:   err.Error(),
-		})
+		response.Error(ctx, response.InternalServerError(err))
 		return
 	}
 
 	err := app.usrService.Create(ctx, users)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorStruct.ResponseError{
-			Error: strconv.Itoa(http.StatusInternalServerError),
-			Msg:   err.Error(),
-		})
+		response.Error(ctx, err)
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, users)
+	response.OK(ctx, users)
 }

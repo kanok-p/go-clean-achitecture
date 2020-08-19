@@ -19,7 +19,7 @@ func (s *Store) List(ctx context.Context, offset, limit int64) (int64, []*domain
 	if err != nil {
 		return total, nil, err
 	}
-	defer cursor.Close(ctx)
+	defer func() { _ = cursor.Close(ctx) }()
 
 	list := make([]*domainUsr.Users, 0)
 	for cursor.Next(ctx) {
