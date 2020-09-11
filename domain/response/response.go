@@ -7,6 +7,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	notfound            = "Notfound"
+	internalServerError = "InternalServerError"
+	badRequest          = "BadRequest"
+	validate            = "Validate"
+)
+
 type APIError struct {
 	Type string
 	Err  error
@@ -28,28 +35,28 @@ type Success struct {
 
 func Notfound(err error) *APIError {
 	return &APIError{
-		Type: "Notfound",
+		Type: notfound,
 		Err:  err,
 	}
 }
 
 func InternalServerError(err error) *APIError {
 	return &APIError{
-		Type: "InternalServerError",
+		Type: internalServerError,
 		Err:  err,
 	}
 }
 
 func BadRequest(err error) *APIError {
 	return &APIError{
-		Type: "BadRequest",
+		Type: badRequest,
 		Err:  err,
 	}
 }
 
 func Validate(err error) *APIError {
 	return &APIError{
-		Type: "Validate",
+		Type: validate,
 		Err:  err,
 	}
 }
@@ -79,25 +86,38 @@ func customError(ctx *gin.Context, err error) {
 	apiError := err.(*APIError)
 
 	switch apiError.Type {
-	case "Notfound":
+	case notfound:
 		ctx.JSON(http.StatusNotFound, &ErrorResponse{
 			Error: strconv.Itoa(http.StatusNotFound),
 			Msg:   apiError.Err.Error(),
 		})
-	case "InternalServerError":
+	case internalServerError:
 		ctx.JSON(http.StatusInternalServerError, &ErrorResponse{
 			Error: strconv.Itoa(http.StatusInternalServerError),
 			Msg:   apiError.Err.Error(),
 		})
-	case "BadRequest":
+	case badRequest:
 		ctx.JSON(http.StatusBadRequest, &ErrorResponse{
 			Error: strconv.Itoa(http.StatusBadRequest),
 			Msg:   apiError.Err.Error(),
 		})
-	case "Validate":
+	case validate:
 		ctx.JSON(http.StatusUnprocessableEntity, &ErrorResponse{
 			Error: strconv.Itoa(http.StatusUnprocessableEntity),
 			Msg:   apiError.Err.Error(),
 		})
 	}
+}
+
+type ListResp struct {
+	Pagination
+	List interface{}
+}
+
+type Pagination struct {
+	Total  int64
+	Page   int64
+	Limit  int64
+	Search string
+	Sort   string
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func (s Store) Delete(ctx context.Context, input *primitive.ObjectID) error {
-	_, err := s.collection().DeleteOne(ctx, bson.M{"_id": input})
+	_, err := s.collection().DeleteOne(ctx, bson.M{_ID: input})
 	if err != nil {
 		return err
 	}

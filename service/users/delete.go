@@ -15,7 +15,7 @@ func (u USRService) Delete(ctx context.Context, input string) (users *domainUsr.
 		return nil, response.BadRequest(err)
 	}
 
-	users, err = u.usrRepo.Get(ctx, &id)
+	users, err = u.usrRepo.Get(ctx, _ID, &id)
 	if err != nil {
 		return nil, response.Notfound(err)
 	}

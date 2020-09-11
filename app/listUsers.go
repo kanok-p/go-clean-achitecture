@@ -5,36 +5,36 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	domainUsr "github.com/kanok-p/go-clean-achitecture/domain/users"
-	"github.com/kanok-p/go-clean-achitecture/util/pagination"
+	"github.com/kanok-p/go-clean-achitecture/domain/request"
+	"github.com/kanok-p/go-clean-achitecture/domain/response"
 )
 
-type GetListInput struct {
-	*pagination.Pagination
-	Limit  int64
-	Offset int64
-}
-
-type ListResp struct {
-	Total int64
-	List  []*domainUsr.Users
-}
-
 func (app *App) ListUsers(ctx *gin.Context) {
-
-	input := &GetListInput{}
+	input := &request.GetListInput{}
 	if err := ctx.ShouldBind(input); err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
 
-	total, list, err := app.usrService.List(ctx, input.Offset, input.Limit)
+	input.Limit = input.GetLimit()
+	if input.Offset == 0 {
+		input.Offset = input.GetOffset()
+	}
+
+	total, list, err := app.usrService.List(ctx, input)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, &ListResp{
-		Total: total,
-		List:  list,
+
+	ctx.JSON(http.StatusOK, &response.ListResp{
+		Pagination: response.Pagination{
+			Total:  total,
+			Page:   input.GetPage(),
+			Limit:  input.Limit,
+			Search: input.Search,
+			Sort:   "",
+		},
+		List: list,
 	})
 }

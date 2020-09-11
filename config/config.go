@@ -6,6 +6,7 @@ type Config struct {
 	MongoDBEndpoint string `env:"MONGODB_ENDPOINT" envDefault:"mongodb://localhost:27017"`
 	MongoDBName     string `env:"MONGODB_NAME,required"`
 	MongoDBCollUser string `env:"MONGODB_COLL_USERS,required"`
+	TimeZone        string `env:"TIMEZONE" envDefault:"Asia/Bangkok"`
 }
 
 func Get() *Config {

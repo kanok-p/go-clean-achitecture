@@ -8,6 +8,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+
+	"github.com/kanok-p/go-clean-achitecture/config"
+)
+
+const (
+	_ID = "_id"
 )
 
 type Store struct {
@@ -16,8 +22,8 @@ type Store struct {
 	collectionName string
 }
 
-func New(mongoEndpoint, dbName, collectionName string) *Store {
-	clientOptions := options.Client().ApplyURI(mongoEndpoint)
+func New(config *config.Config) *Store {
+	clientOptions := options.Client().ApplyURI(config.MongoDBEndpoint)
 
 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 
@@ -31,8 +37,8 @@ func New(mongoEndpoint, dbName, collectionName string) *Store {
 	}
 
 	return &Store{
-		dbName:         dbName,
-		collectionName: collectionName,
+		dbName:         config.MongoDBName,
+		collectionName: config.MongoDBCollUser,
 		db:             db,
 	}
 }

@@ -15,6 +15,6 @@ func (u USRService) Get(ctx context.Context, input string) (users *domainUsr.Use
 		return nil, response.BadRequest(err)
 	}
 
-	return u.usrRepo.Get(ctx, &id)
+	return u.usrRepo.Get(ctx, _ID, &id)
 
 }

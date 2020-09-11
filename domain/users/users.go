@@ -10,6 +10,7 @@ type Users struct {
 	ID           primitive.ObjectID `bson:"_id"`
 	CitizenID    string
 	Email        string
+	Password     string `json:"-"`
 	MobileNumber string
 	FirstName    string
 	LastName     string
@@ -28,11 +29,9 @@ func Create() *Users {
 	}
 }
 
-
 func Update() *Users {
 	now := time.Now()
 	return &Users{
 		UpdatedAt: now.Unix(),
 	}
 }
-

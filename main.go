@@ -6,7 +6,9 @@ import (
 	"github.com/kanok-p/go-clean-achitecture/config"
 )
 
-const port = ":8080"
+const (
+	port = ":8080"
+)
 
 func main() {
 	conf := config.Get()

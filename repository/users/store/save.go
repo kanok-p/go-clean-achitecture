@@ -10,11 +10,12 @@ import (
 )
 
 func (s Store) Save(ctx context.Context, input *users.Users) error {
-	filter := bson.M{"_id": input.ID}
+	filter := bson.M{_ID: input.ID}
 	update := bson.M{
 		"$set": bson.M{
 			"CitizenID":    input.CitizenID,
 			"Email":        input.Email,
+			"Password":     input.Password,
 			"MobileNumber": input.MobileNumber,
 			"FirstName":    input.FirstName,
 			"LastName":     input.LastName,
@@ -24,7 +25,6 @@ func (s Store) Save(ctx context.Context, input *users.Users) error {
 			"UpdatedAt":    input.UpdatedAt,
 		},
 	}
-
 	_, err := s.collection().UpdateOne(ctx, filter, update, options.Update().SetUpsert(true))
 
 	return err

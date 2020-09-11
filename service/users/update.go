@@ -22,7 +22,7 @@ type UpdateUsers struct {
 }
 
 func (u USRService) Update(ctx context.Context, input *UpdateUsers) (users *domainUsr.Users, err error) {
-	data, err := u.usrRepo.Get(ctx, input.ID)
+	data, err := u.usrRepo.Get(ctx, _ID, input.ID)
 	if err != nil {
 		return nil, response.Notfound(err)
 	}

@@ -9,13 +9,13 @@ import (
 	domainUsr "github.com/kanok-p/go-clean-achitecture/domain/users"
 )
 
-func (s *Store) List(ctx context.Context, offset, limit int64) (int64, []*domainUsr.Users, error) {
-	total, err := s.collection().CountDocuments(ctx, bson.M{})
+func (s *Store) List(ctx context.Context, offset, limit int64, filter bson.M) (int64, []*domainUsr.Users, error) {
+	total, err := s.collection().CountDocuments(ctx, filter)
 	if err != nil {
 		return total, nil, err
 	}
 
-	cursor, err := s.collection().Find(ctx, bson.M{}, options.Find().SetLimit(limit).SetSkip(offset))
+	cursor, err := s.collection().Find(ctx, filter, options.Find().SetLimit(limit).SetSkip(offset))
 	if err != nil {
 		return total, nil, err
 	}
