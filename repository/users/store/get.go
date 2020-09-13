@@ -5,7 +5,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 
-	domainUsr "github.com/kanok-p/go-clean-achitecture/domain/users"
+	domainUsr "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
 func (s Store) Get(ctx context.Context, field string, value interface{}) (users *domainUsr.Users, err error) {

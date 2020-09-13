@@ -4,7 +4,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/kanok-p/go-clean-achitecture/util/pagination"
+	"github.com/kanok-p/go-clean-architecture/util/pagination"
 )
 
 type KeyValue struct {

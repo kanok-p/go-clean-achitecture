@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/kanok-p/go-clean-achitecture/app"
-	"github.com/kanok-p/go-clean-achitecture/config"
-	userStore "github.com/kanok-p/go-clean-achitecture/repository/users/store"
-	userService "github.com/kanok-p/go-clean-achitecture/service/users"
-	"github.com/kanok-p/go-clean-achitecture/util/validate"
+	"github.com/kanok-p/go-clean-architecture/app"
+	"github.com/kanok-p/go-clean-architecture/config"
+	userStore "github.com/kanok-p/go-clean-architecture/repository/users/store"
+	userService "github.com/kanok-p/go-clean-architecture/service/users"
+	"github.com/kanok-p/go-clean-architecture/util/validate"
 )
 
 var formats = map[string][]string{
@@ -13,7 +13,11 @@ var formats = map[string][]string{
 }
 
 func newApp(config *config.Config) *app.App {
-	usrRepo := userStore.New(config)
+	usrRepo, err := userStore.New(config)
+	if err != nil {
+		panic(err)
+	}
+
 	validator := validate.New(usrRepo, config, formats)
 	usrService := userService.New(usrRepo, validator)
 	return app.New(usrService)

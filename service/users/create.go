@@ -5,9 +5,9 @@ import (
 
 	"github.com/jinzhu/copier"
 
-	"github.com/kanok-p/go-clean-achitecture/domain/response"
-	domainUsr "github.com/kanok-p/go-clean-achitecture/domain/users"
-	"github.com/kanok-p/go-clean-achitecture/util/password"
+	"github.com/kanok-p/go-clean-architecture/domain/response"
+	domainUsr "github.com/kanok-p/go-clean-architecture/domain/users"
+	"github.com/kanok-p/go-clean-architecture/util/password"
 )
 
 type CreateUsers struct {

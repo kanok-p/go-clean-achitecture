@@ -6,9 +6,9 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 
-	"github.com/kanok-p/go-clean-achitecture/domain/request"
-	"github.com/kanok-p/go-clean-achitecture/domain/response"
-	domainUsr "github.com/kanok-p/go-clean-achitecture/domain/users"
+	"github.com/kanok-p/go-clean-architecture/domain/request"
+	"github.com/kanok-p/go-clean-architecture/domain/response"
+	domainUsr "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
 func (u USRService) List(ctx context.Context, input *request.GetListInput) (int64, []*domainUsr.Users, error) {

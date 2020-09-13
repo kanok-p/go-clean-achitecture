@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/kanok-p/go-clean-achitecture/config"
+	"github.com/kanok-p/go-clean-architecture/config"
 )
 
 const (
@@ -11,7 +11,10 @@ const (
 )
 
 func main() {
-	conf := config.Get()
+	conf, err := config.Get()
+	if err != nil {
+		panic(err)
+	}
 
 	router := gin.New()
 	router.Use(gin.Recovery())

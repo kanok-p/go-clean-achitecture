@@ -1,6 +1,6 @@
 package request
 
-import "github.com/kanok-p/go-clean-achitecture/util/pagination"
+import "github.com/kanok-p/go-clean-architecture/util/pagination"
 
 type GetListInput struct {
 	*pagination.Pagination

@@ -3,7 +3,7 @@ package app
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/kanok-p/go-clean-achitecture/domain/response"
+	"github.com/kanok-p/go-clean-architecture/domain/response"
 )
 
 func (app *App) DeleteUsers(ctx *gin.Context) {

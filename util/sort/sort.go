@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/kanok-p/go-clean-achitecture/util/search"
+	"github.com/kanok-p/go-clean-architecture/util/search"
 )
 
 func parseMongoOrder(sortStr string) int64 {

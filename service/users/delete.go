@@ -5,8 +5,8 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/kanok-p/go-clean-achitecture/domain/response"
-	domainUsr "github.com/kanok-p/go-clean-achitecture/domain/users"
+	"github.com/kanok-p/go-clean-architecture/domain/response"
+	domainUsr "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
 func (u USRService) Delete(ctx context.Context, input string) (users *domainUsr.Users, err error) {

@@ -9,11 +9,11 @@ type Config struct {
 	TimeZone        string `env:"TIMEZONE" envDefault:"Asia/Bangkok"`
 }
 
-func Get() *Config {
+func Get() (*Config, error) {
 	conf := &Config{}
 	if err := env.Parse(conf); err != nil {
-		panic(err)
+		return conf, err
 	}
 
-	return conf
+	return conf, nil
 }

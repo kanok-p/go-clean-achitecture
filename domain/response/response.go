@@ -68,6 +68,14 @@ func OK(ctx *gin.Context, resp interface{}) {
 	})
 }
 
+func Created(ctx *gin.Context, resp interface{}) {
+	ctx.JSON(http.StatusCreated, &Success{
+		Code: strconv.Itoa(http.StatusCreated),
+		Data: resp,
+	})
+}
+
+
 func Error(ctx *gin.Context, err error) {
 	switch err.(type) {
 	case *APIError:
@@ -91,11 +99,6 @@ func customError(ctx *gin.Context, err error) {
 			Error: strconv.Itoa(http.StatusNotFound),
 			Msg:   apiError.Err.Error(),
 		})
-	case internalServerError:
-		ctx.JSON(http.StatusInternalServerError, &ErrorResponse{
-			Error: strconv.Itoa(http.StatusInternalServerError),
-			Msg:   apiError.Err.Error(),
-		})
 	case badRequest:
 		ctx.JSON(http.StatusBadRequest, &ErrorResponse{
 			Error: strconv.Itoa(http.StatusBadRequest),
@@ -104,6 +107,11 @@ func customError(ctx *gin.Context, err error) {
 	case validate:
 		ctx.JSON(http.StatusUnprocessableEntity, &ErrorResponse{
 			Error: strconv.Itoa(http.StatusUnprocessableEntity),
+			Msg:   apiError.Err.Error(),
+		})
+	case internalServerError:
+		ctx.JSON(http.StatusInternalServerError, &ErrorResponse{
+			Error: strconv.Itoa(http.StatusInternalServerError),
 			Msg:   apiError.Err.Error(),
 		})
 	}

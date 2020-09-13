@@ -7,14 +7,13 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/uniplaces/carbon"
 
-	"github.com/kanok-p/go-clean-achitecture/config"
-	"github.com/kanok-p/go-clean-achitecture/repository/users"
+	"github.com/kanok-p/go-clean-architecture/config"
+	"github.com/kanok-p/go-clean-architecture/repository/users"
 )
 
+//go:generate mockery --name=Validator
 type Validator interface {
 	Validate(ctx context.Context, params interface{}) error
-	Unique(ctx context.Context) validator.Func
-	IsDateFormat() validator.Func
 }
 
 type VLDService struct {
@@ -33,9 +32,9 @@ func New(repo users.Repository, config *config.Config, formats ...map[string][]s
 
 func (vld VLDService) Validate(ctx context.Context, params interface{}) error {
 	validate := validator.New()
-	_ = validate.RegisterValidation("unique", vld.Unique(ctx))
-	_ = validate.RegisterValidation("date-format", vld.IsDateFormat())
-	_ = validate.RegisterValidation("password-format", vld.Format(vld.getFormat("password")))
+	_ = validate.RegisterValidation("unique", vld.unique(ctx))
+	_ = validate.RegisterValidation("date-format", vld.isDateFormat())
+	_ = validate.RegisterValidation("password-format", vld.format(vld.getFormat("password")))
 	err := validate.Struct(params)
 
 	return err
@@ -45,7 +44,7 @@ func (vld VLDService) getFormat(name string) []string {
 	return vld.formats[name]
 }
 
-func (vld VLDService) Unique(ctx context.Context) validator.Func {
+func (vld VLDService) unique(ctx context.Context) validator.Func {
 	return func(fl validator.FieldLevel) bool {
 		value := fl.Field().Interface()
 		field := fl.StructFieldName()
@@ -58,7 +57,7 @@ func (vld VLDService) Unique(ctx context.Context) validator.Func {
 	}
 }
 
-func (vld VLDService) IsDateFormat() validator.Func {
+func (vld VLDService) isDateFormat() validator.Func {
 	return func(fl validator.FieldLevel) bool {
 		format := fl.Param()
 		dateString := fl.Field().String()
@@ -68,7 +67,7 @@ func (vld VLDService) IsDateFormat() validator.Func {
 	}
 }
 
-func (vld VLDService) Format(formats []string) validator.Func {
+func (vld VLDService) format(formats []string) validator.Func {
 	return func(fl validator.FieldLevel) bool {
 		field := fl.Field().String()
 		for _, format := range formats {

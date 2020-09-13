@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	domainUsr "github.com/kanok-p/go-clean-achitecture/domain/users"
+	domainUsr "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
 func (s *Store) List(ctx context.Context, offset, limit int64, filter bson.M) (int64, []*domainUsr.Users, error) {
