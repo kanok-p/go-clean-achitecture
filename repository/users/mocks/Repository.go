@@ -30,13 +30,13 @@ func (_m *Repository) Delete(ctx context.Context, input *primitive.ObjectID) err
 	return r0
 }
 
-// Get provides a mock function with given fields: ctx, field, value
-func (_m *Repository) Get(ctx context.Context, field string, value interface{}) (*domainusers.Users, error) {
-	ret := _m.Called(ctx, field, value)
+// Get provides a mock function with given fields: ctx, input
+func (_m *Repository) Get(ctx context.Context, input map[string]interface{}) (*domainusers.Users, error) {
+	ret := _m.Called(ctx, input)
 
 	var r0 *domainusers.Users
-	if rf, ok := ret.Get(0).(func(context.Context, string, interface{}) *domainusers.Users); ok {
-		r0 = rf(ctx, field, value)
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]interface{}) *domainusers.Users); ok {
+		r0 = rf(ctx, input)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*domainusers.Users)
@@ -44,8 +44,8 @@ func (_m *Repository) Get(ctx context.Context, field string, value interface{}) 
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, string, interface{}) error); ok {
-		r1 = rf(ctx, field, value)
+	if rf, ok := ret.Get(1).(func(context.Context, map[string]interface{}) error); ok {
+		r1 = rf(ctx, input)
 	} else {
 		r1 = ret.Error(1)
 	}

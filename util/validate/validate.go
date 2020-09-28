@@ -48,7 +48,10 @@ func (vld VLDService) unique(ctx context.Context) validator.Func {
 	return func(fl validator.FieldLevel) bool {
 		value := fl.Field().Interface()
 		field := fl.StructFieldName()
-		_, err := vld.usrRepo.Get(ctx, field, value)
+		filter := map[string]interface{}{
+			field: value,
+		}
+		_, err := vld.usrRepo.Get(ctx, filter)
 		if err != nil {
 			return true
 		}
@@ -56,6 +59,38 @@ func (vld VLDService) unique(ctx context.Context) validator.Func {
 		return false
 	}
 }
+
+//func (vld VLDService) anotherUnique(ctx context.Context, id string) validator.Func {
+//	return func(fl validator.FieldLevel) bool {
+//		oID, err := primitive.ObjectIDFromHex(id)
+//		if err != nil {
+//			return true
+//		}
+//
+//		field := fl.StructFieldName()
+//		value := fl.Field().Interface()
+//
+//
+//		_, err := vld.usrRepo.Get(ctx, filter)
+//		if err != nil {
+//			return true
+//		}
+//
+//		return false
+//	}
+//}
+
+//func makeFil(){
+//
+//	filter := bson.M{
+//		"$and": bson.A{
+//			bson.M{"_id": bson.M{
+//				"$ne": oID,
+//			}},
+//			bson.M{field: value},
+//		},
+//	}
+//}
 
 func (vld VLDService) isDateFormat() validator.Func {
 	return func(fl validator.FieldLevel) bool {

@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/kanok-p/go-clean-architecture/domain/response"
-	domainUsr "github.com/kanok-p/go-clean-architecture/domain/users"
+	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
 type UpdateUsers struct {
@@ -21,13 +21,16 @@ type UpdateUsers struct {
 	Gender       string
 }
 
-func (u USRService) Update(ctx context.Context, input *UpdateUsers) (users *domainUsr.Users, err error) {
-	data, err := u.usrRepo.Get(ctx, _ID, input.ID)
+func (u USRService) Update(ctx context.Context, input *UpdateUsers) (users *domain.Users, err error) {
+	filter := map[string]interface{}{
+		_ID: input.ID,
+	}
+	data, err := u.usrRepo.Get(ctx, filter)
 	if err != nil {
 		return nil, response.Notfound(err)
 	}
 
-	users = domainUsr.Update()
+	users = domain.Update()
 	if err = copier.Copy(users, &input); err != nil {
 		return nil, response.BadRequest(err)
 	}

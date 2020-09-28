@@ -6,7 +6,7 @@ import (
 	"github.com/jinzhu/copier"
 
 	"github.com/kanok-p/go-clean-architecture/domain/response"
-	domainUsr "github.com/kanok-p/go-clean-architecture/domain/users"
+	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 	"github.com/kanok-p/go-clean-architecture/util/password"
 )
 
@@ -24,7 +24,7 @@ type CreateUsers struct {
 }
 
 func (u USRService) Create(ctx context.Context, input *CreateUsers) (err error) {
-	users := domainUsr.Create()
+	users := domain.Create()
 	if err = copier.Copy(users, &input); err != nil {
 		return response.InternalServerError(err)
 	}

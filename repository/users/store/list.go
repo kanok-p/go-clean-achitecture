@@ -6,10 +6,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	domainUsr "github.com/kanok-p/go-clean-architecture/domain/users"
+	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
-func (s *Store) List(ctx context.Context, offset, limit int64, filter bson.M) (int64, []*domainUsr.Users, error) {
+func (s *Store) List(ctx context.Context, offset, limit int64, filter bson.M) (int64, []*domain.Users, error) {
 	total, err := s.collection().CountDocuments(ctx, filter)
 	if err != nil {
 		return total, nil, err
@@ -21,9 +21,9 @@ func (s *Store) List(ctx context.Context, offset, limit int64, filter bson.M) (i
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
-	list := make([]*domainUsr.Users, 0)
+	list := make([]*domain.Users, 0)
 	for cursor.Next(ctx) {
-		user := &domainUsr.Users{}
+		user := &domain.Users{}
 		if err := cursor.Decode(user); err != nil {
 			return total, nil, err
 		}

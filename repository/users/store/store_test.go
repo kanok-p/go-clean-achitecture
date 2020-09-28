@@ -23,7 +23,7 @@ func TestRunSuite(t *testing.T) {
 }
 
 func (suite *storeUSRSuite) SetupTest() {
-	_ = godotenv.Load("/Users/pop/github/go-clean-architecture/.env")
+	_ = godotenv.Load("/Users/pop/go-clean-architecture/.env")
 	conf, err := config.Get()
 	suite.NoError(err)
 
@@ -32,7 +32,7 @@ func (suite *storeUSRSuite) SetupTest() {
 }
 
 func (suite *storeUSRSuite) TestNew() {
-	_ = godotenv.Load("/Users/pop/github/go-clean-architecture/.env")
+	_ = godotenv.Load("/Users/pop/go-clean-architecture/.env")
 	conf, err := config.Get()
 	suite.NoError(err)
 
@@ -42,7 +42,7 @@ func (suite *storeUSRSuite) TestNew() {
 }
 
 func (suite *storeUSRSuite) TestNewErrorConnect() {
-	_ = godotenv.Load("/Users/pop/github/go-clean-architecture/.env")
+	_ = godotenv.Load("/Users/pop/go-clean-architecture/.env")
 	conf, err := config.Get()
 	suite.NoError(err)
 	conf.MongoDBEndpoint = conf.MongoDBEndpoint + "with error"
@@ -52,7 +52,7 @@ func (suite *storeUSRSuite) TestNewErrorConnect() {
 }
 
 func (suite *storeUSRSuite) TestNewErrorPingDatabase() {
-	_ = godotenv.Load("/Users/pop/github/go-clean-architecture/.env")
+	_ = godotenv.Load("/Users/pop/go-clean-architecture/.env")
 	conf, err := config.Get()
 	suite.NoError(err)
 	conf.MongoDBEndpoint = "mongodb://touch:secret1@localhost:27017"

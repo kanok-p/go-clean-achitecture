@@ -1,6 +1,9 @@
 package app
 
 import (
+	"bytes"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -11,6 +14,7 @@ import (
 )
 
 const (
+	ID           = "5f71afe3122bef90f93da974"
 	CitizenID    = "1234567890123"
 	Email        = "test@mail.com"
 	Password     = "Pa55w0rd"
@@ -45,6 +49,24 @@ func (s *AppTestSuite) SetupTest() {
 
 func TestAppSuite(t *testing.T) {
 	suite.Run(t, new(AppTestSuite))
+}
+
+func (s *AppTestSuite) TestHealthCheck() {
+	req, resp := buildRequestHealthCheck()
+	s.router.ServeHTTP(resp, req)
+
+	s.Equal(http.StatusOK, resp.Code)
+	s.usersService.AssertExpectations(s.T())
+}
+
+func buildRequestHealthCheck() (*http.Request, *httptest.ResponseRecorder) {
+	var req *http.Request
+	w := httptest.NewRecorder()
+
+	req, _ = http.NewRequest("GET", "/health-check", bytes.NewBuffer(nil))
+	req.Header.Set("Content-Type", "application/json")
+
+	return req, w
 }
 
 var input = inout.User{

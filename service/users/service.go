@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/kanok-p/go-clean-architecture/domain/request"
-	domainUsr "github.com/kanok-p/go-clean-architecture/domain/users"
+	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 	"github.com/kanok-p/go-clean-architecture/repository/users"
 	"github.com/kanok-p/go-clean-architecture/util/validate"
 )
@@ -15,11 +15,11 @@ const (
 
 //go:generate mockery --name=Service
 type Service interface {
-	List(ctx context.Context, input *request.GetListInput) (int64, []*domainUsr.Users, error)
+	List(ctx context.Context, input *request.GetListInput) (int64, []*domain.Users, error)
 	Create(ctx context.Context, input *CreateUsers) error
-	Get(ctx context.Context, input string) (*domainUsr.Users, error)
-	Update(ctx context.Context, input *UpdateUsers) (*domainUsr.Users, error)
-	Delete(ctx context.Context, input string) (*domainUsr.Users, error)
+	Get(ctx context.Context, input string) (*domain.Users, error)
+	Update(ctx context.Context, input *UpdateUsers) (*domain.Users, error)
+	Delete(ctx context.Context, input string) (*domain.Users, error)
 }
 
 type USRService struct {

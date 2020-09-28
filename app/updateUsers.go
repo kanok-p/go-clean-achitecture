@@ -13,19 +13,19 @@ import (
 func (app *App) UpdateUsers(ctx *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
 	if err != nil {
-		response.Error(ctx, err)
+		response.Error(ctx, response.BadRequest(err))
 		return
 	}
 
 	input := inout.User{}
 	if err := ctx.ShouldBind(&input); err != nil {
-		response.Error(ctx, err)
+		response.Error(ctx, response.BadRequest(err))
 		return
 	}
 
 	users := &serviceUsr.UpdateUsers{}
 	if err := copier.Copy(users, &input); err != nil {
-		response.Error(ctx, err)
+		response.Error(ctx, response.InternalServerError(err))
 		return
 	}
 	users.ID = &id

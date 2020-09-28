@@ -12,7 +12,7 @@ import (
 func (app *App) ListUsers(ctx *gin.Context) {
 	input := &request.GetListInput{}
 	if err := ctx.ShouldBind(input); err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		response.Error(ctx, response.BadRequest(err))
 		return
 	}
 
@@ -23,7 +23,7 @@ func (app *App) ListUsers(ctx *gin.Context) {
 
 	total, list, err := app.usrService.List(ctx, input)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, err)
+		response.Error(ctx, err)
 		return
 	}
 

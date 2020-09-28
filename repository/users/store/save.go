@@ -12,18 +12,7 @@ import (
 func (s Store) Save(ctx context.Context, input *users.Users) error {
 	filter := bson.M{_ID: input.ID}
 	update := bson.M{
-		"$set": bson.M{
-			"CitizenID":    input.CitizenID,
-			"Email":        input.Email,
-			"Password":     input.Password,
-			"MobileNumber": input.MobileNumber,
-			"FirstName":    input.FirstName,
-			"LastName":     input.LastName,
-			"BirthDate":    input.BirthDate,
-			"Gender":       input.Gender,
-			"CreatedAt":    input.CreatedAt,
-			"UpdatedAt":    input.UpdatedAt,
-		},
+		"$set": input,
 	}
 	_, err := s.collection().UpdateOne(ctx, filter, update, options.Update().SetUpsert(true))
 

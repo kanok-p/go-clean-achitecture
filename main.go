@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/kanok-p/go-clean-architecture/config"
@@ -13,7 +15,7 @@ const (
 func main() {
 	conf, err := config.Get()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	router := gin.New()

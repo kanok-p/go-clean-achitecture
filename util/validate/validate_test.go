@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/kanok-p/go-clean-architecture/config"
-	domainusers "github.com/kanok-p/go-clean-architecture/domain/users"
+	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 	USRMock "github.com/kanok-p/go-clean-architecture/repository/users/mocks"
 )
 
@@ -54,7 +54,7 @@ func TestRunSuite(t *testing.T) {
 }
 
 func (suite *VLDSuite) SetupTest() {
-	_ = godotenv.Load("/Users/pop/github/go-clean-architecture/.env")
+	_ = godotenv.Load("/Users/pop/go-clean-architecture/.env")
 	conf, err := config.Get()
 	suite.NoError(err)
 	suite.usrRepo = &USRMock.Repository{}
@@ -62,7 +62,7 @@ func (suite *VLDSuite) SetupTest() {
 }
 
 func (suite *VLDSuite) TestNew() {
-	_ = godotenv.Load("/Users/pop/github/go-clean-architecture/.env")
+	_ = godotenv.Load("/Users/pop/go-clean-architecture/.env")
 	conf, err := config.Get()
 	suite.NoError(err)
 
@@ -70,19 +70,23 @@ func (suite *VLDSuite) TestNew() {
 	suite.NotEqual(nil, suite.validator)
 }
 
+var ValidateEmail = map[string]interface{}{"Email": testValidateSuccess.Email}
+var ValidateCitizenID = map[string]interface{}{"CitizenID": testValidateSuccess.CitizenID}
+var ValidateMobileNumber = map[string]interface{}{"MobileNumber": testValidateSuccess.MobileNumber}
+
 func (suite *VLDSuite) TestValidateSuccess() {
-	suite.usrRepo.On("Get", context.Background(), "CitizenID", testValidateSuccess.CitizenID).Once().Return(&domainusers.Users{}, errors.New("no documents in mongo"))
-	suite.usrRepo.On("Get", context.Background(), "Email", testValidateSuccess.Email).Once().Return(&domainusers.Users{}, errors.New("no documents in mongo"))
-	suite.usrRepo.On("Get", context.Background(), "MobileNumber", testValidateSuccess.MobileNumber).Once().Return(&domainusers.Users{}, errors.New("no documents in mongo"))
+	suite.usrRepo.On("Get", context.Background(), ValidateCitizenID).Once().Return(&domain.Users{}, errors.New("no documents in mongo"))
+	suite.usrRepo.On("Get", context.Background(), ValidateEmail).Once().Return(&domain.Users{}, errors.New("no documents in mongo"))
+	suite.usrRepo.On("Get", context.Background(), ValidateMobileNumber).Once().Return(&domain.Users{}, errors.New("no documents in mongo"))
 
 	err := suite.validator.Validate(context.Background(), testValidateSuccess)
 	suite.NoError(err)
 }
 
 func (suite *VLDSuite) TestValidateError() {
-	suite.usrRepo.On("Get", context.Background(), "CitizenID", testValidateSuccess.CitizenID).Once().Return(&domainusers.Users{}, nil)
-	suite.usrRepo.On("Get", context.Background(), "Email", testValidateSuccess.Email).Once().Return(&domainusers.Users{}, nil)
-	suite.usrRepo.On("Get", context.Background(), "MobileNumber", testValidateSuccess.MobileNumber).Once().Return(&domainusers.Users{}, nil)
+	suite.usrRepo.On("Get", context.Background(), ValidateCitizenID).Once().Return(&domain.Users{}, nil)
+	suite.usrRepo.On("Get", context.Background(), ValidateEmail).Once().Return(&domain.Users{}, nil)
+	suite.usrRepo.On("Get", context.Background(), ValidateMobileNumber).Once().Return(&domain.Users{}, nil)
 	err := suite.validator.Validate(context.Background(), testValidateError)
 	suite.Error(err)
 }

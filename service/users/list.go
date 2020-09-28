@@ -8,17 +8,11 @@ import (
 
 	"github.com/kanok-p/go-clean-architecture/domain/request"
 	"github.com/kanok-p/go-clean-architecture/domain/response"
-	domainUsr "github.com/kanok-p/go-clean-architecture/domain/users"
+	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
-func (u USRService) List(ctx context.Context, input *request.GetListInput) (int64, []*domainUsr.Users, error) {
-	var keys []string
-	userStruct := reflect.Indirect(reflect.ValueOf(domainUsr.Users{}))
-	for i := 0; i < (userStruct.NumField() - 1); i++ {
-		keys = append(keys, userStruct.Type().Field(i).Name)
-	}
-
-	filter := makeFilter(keys, input.Search)
+func (u USRService) List(ctx context.Context, input *request.GetListInput) (int64, []*domain.Users, error) {
+	filter := makeFilter(domain.Users{}, input.Search)
 	total, list, err := u.usrRepo.List(ctx, input.Offset, input.Limit, filter)
 	if err != nil {
 		return total, nil, response.InternalServerError(err)
@@ -27,7 +21,17 @@ func (u USRService) List(ctx context.Context, input *request.GetListInput) (int6
 	return total, list, nil
 }
 
-func makeFilter(keys []string, search string) (filter bson.M) {
+func makeFilter(structure interface{}, search string) (filter bson.M) {
+	if search == "" {
+		return bson.M{}
+	}
+
+	var keys []string
+	userStruct := reflect.Indirect(reflect.ValueOf(structure))
+	for i := 0; i < (userStruct.NumField() - 1); i++ {
+		keys = append(keys, userStruct.Type().Field(i).Name)
+	}
+
 	slFilter := bson.A{}
 	for _, key := range keys {
 		slFilter = append(slFilter, bson.M{
