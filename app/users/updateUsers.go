@@ -1,32 +1,40 @@
-package app
+package users
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/kanok-p/go-clean-architecture/app/inout"
 	"github.com/kanok-p/go-clean-architecture/domain/response"
 	serviceUsr "github.com/kanok-p/go-clean-architecture/service/users"
 )
 
-func (app *App) CreateUsers(ctx *gin.Context) {
+func (ctrl *Controller) UpdateUsers(ctx *gin.Context) {
+	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
+	if err != nil {
+		response.Error(ctx, response.BadRequest(err))
+		return
+	}
+
 	input := inout.User{}
 	if err := ctx.ShouldBind(&input); err != nil {
 		response.Error(ctx, response.BadRequest(err))
 		return
 	}
 
-	users := &serviceUsr.CreateUsers{}
+	users := &serviceUsr.UpdateUsers{}
 	if err := copier.Copy(users, &input); err != nil {
 		response.Error(ctx, response.InternalServerError(err))
 		return
 	}
+	users.ID = &id
 
-	err := app.usrService.Create(ctx, users)
+	usersResp, err := ctrl.service.Update(ctx, users)
 	if err != nil {
 		response.Error(ctx, err)
 		return
 	}
 
-	response.Created(ctx, users)
+	response.OK(ctx, usersResp)
 }

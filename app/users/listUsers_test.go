@@ -1,4 +1,4 @@
-package app
+package users
 
 import (
 	"bytes"
@@ -20,7 +20,7 @@ var reqGetListInput = &request.GetListInput{
 	Search: "",
 }
 
-func (s *AppTestSuite) TestListUsers() {
+func (s *app.AppTestSuite) TestListUsers() {
 	s.usersService.On("List", mock.Anything, &request.GetListInput{}).Return(
 		int64(0), []*domain.Users{}, (error)(nil),
 	)
@@ -32,7 +32,7 @@ func (s *AppTestSuite) TestListUsers() {
 	s.usersService.AssertExpectations(s.T())
 }
 
-func (s *AppTestSuite) TestListUsersError() {
+func (s *app.AppTestSuite) TestListUsersError() {
 	s.usersService.On("List", mock.Anything, &request.GetListInput{}).Return(
 		int64(0), nil, errors.New("test_error"),
 	)

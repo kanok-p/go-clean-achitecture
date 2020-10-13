@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/kanok-p/go-clean-architecture/app"
+	userController "github.com/kanok-p/go-clean-architecture/app/users"
 	"github.com/kanok-p/go-clean-architecture/config"
 	userStore "github.com/kanok-p/go-clean-architecture/repository/users/store"
 	userService "github.com/kanok-p/go-clean-architecture/service/users"
@@ -20,5 +21,6 @@ func newApp(config *config.Config) *app.App {
 
 	validator := validate.New(usrRepo, config, formats)
 	usrService := userService.New(usrRepo, validator)
-	return app.New(usrService)
+	usrController := userController.New(usrService)
+	return app.New(*usrController)
 }

@@ -23,7 +23,12 @@ func (u USRService) Get(ctx context.Context, input string) (users *domain.Users,
 		_ID: &id,
 	}
 
-	return u.usrRepo.Get(ctx, filter)
+	users, err = u.usrRepo.Get(ctx, filter)
+	if err.Error() == "mongo: no documents in result" {
+		return nil, response.Notfound(err)
+	}
+
+	return
 
 }
 

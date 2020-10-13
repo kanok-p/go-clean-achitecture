@@ -1,4 +1,4 @@
-package app
+package users
 
 import (
 	"net/http"
@@ -9,7 +9,7 @@ import (
 	"github.com/kanok-p/go-clean-architecture/domain/response"
 )
 
-func (app *App) ListUsers(ctx *gin.Context) {
+func (ctrl *Controller) ListUsers(ctx *gin.Context) {
 	input := &request.GetListInput{}
 	if err := ctx.ShouldBind(input); err != nil {
 		response.Error(ctx, response.BadRequest(err))
@@ -21,7 +21,7 @@ func (app *App) ListUsers(ctx *gin.Context) {
 		input.Offset = input.GetOffset()
 	}
 
-	total, list, err := app.usrService.List(ctx, input)
+	total, list, err := ctrl.service.List(ctx, input)
 	if err != nil {
 		response.Error(ctx, err)
 		return

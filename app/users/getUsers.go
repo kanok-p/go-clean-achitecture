@@ -1,4 +1,4 @@
-package app
+package users
 
 import (
 	"github.com/gin-gonic/gin"
@@ -6,9 +6,9 @@ import (
 	"github.com/kanok-p/go-clean-architecture/domain/response"
 )
 
-func (app *App) GetUsers(ctx *gin.Context) {
+func (ctrl *Controller) GetUsers(ctx *gin.Context) {
 	id := ctx.Param("id")
-	users, err := app.usrService.Get(ctx, id)
+	users, err := ctrl.service.Get(ctx, id)
 	if err != nil {
 		response.Error(ctx, err)
 		return

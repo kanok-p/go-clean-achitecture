@@ -1,4 +1,4 @@
-package app
+package users
 
 import (
 	"bytes"
@@ -10,31 +10,32 @@ import (
 
 	"github.com/stretchr/testify/mock"
 
+	"github.com/kanok-p/go-clean-architecture/app"
 	"github.com/kanok-p/go-clean-architecture/app/inout"
 	serviceUsr "github.com/kanok-p/go-clean-architecture/service/users"
 )
 
-func (s *AppTestSuite) TestCreateUsers() {
+func (s *app.AppTestSuite) TestCreateUsers() {
 
 	s.usersService.On("Create", mock.Anything, &serviceUsr.CreateUsers{
-		CitizenID:    CitizenID,
-		Email:        Email,
-		Password:     Password,
-		MobileNumber: MobileNumber,
-		FirstName:    FirstName,
-		LastName:     LastName,
-		BirthDate:    BirthDate,
-		Gender:       Gender,
+		CitizenID:    app.CitizenID,
+		Email:        app.Email,
+		Password:     app.Password,
+		MobileNumber: app.MobileNumber,
+		FirstName:    app.FirstName,
+		LastName:     app.LastName,
+		BirthDate:    app.BirthDate,
+		Gender:       app.Gender,
 	}).Return(func(context.Context, *serviceUsr.CreateUsers) error { return nil })
 
-	req, resp := buildRequestCreateUsers(&input)
+	req, resp := buildRequestCreateUsers(&app.input)
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusCreated, resp.Code)
 	s.usersService.AssertExpectations(s.T())
 }
 
-func (s *AppTestSuite) TestCreateUsersError() {
+func (s *app.AppTestSuite) TestCreateUsersError() {
 
 	s.usersService.On("Create", mock.Anything, &serviceUsr.CreateUsers{}).Return(
 		func(context.Context, *serviceUsr.CreateUsers) error { return errors.New("create_users_error") })
@@ -57,7 +58,7 @@ func buildRequestCreateUsers(input *inout.User) (*http.Request, *httptest.Respon
 	return req, w
 }
 
-func (s *AppTestSuite) TestCreateUsersErrorBadRequest() {
+func (s *app.AppTestSuite) TestCreateUsersErrorBadRequest() {
 	input := "test_bad_request"
 	req, resp := buildRequestCreateUsersError(&input)
 	s.router.ServeHTTP(resp, req)

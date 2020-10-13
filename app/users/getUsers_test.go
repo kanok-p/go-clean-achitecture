@@ -1,4 +1,4 @@
-package app
+package users
 
 import (
 	"bytes"
@@ -9,27 +9,28 @@ import (
 
 	"github.com/stretchr/testify/mock"
 
+	"github.com/kanok-p/go-clean-architecture/app"
 	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
-func (s *AppTestSuite) TestGetUsers() {
-	s.usersService.On("Get", mock.Anything, ID).Return(
+func (s *app.AppTestSuite) TestGetUsers() {
+	s.usersService.On("Get", mock.Anything, app.ID).Return(
 		&domain.Users{}, (error)(nil),
 	)
 
-	req, resp := buildRequestGetUsers(ID)
+	req, resp := buildRequestGetUsers(app.ID)
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusOK, resp.Code)
 	s.usersService.AssertExpectations(s.T())
 }
 
-func (s *AppTestSuite) TestGetUsersError() {
-	s.usersService.On("Get", mock.Anything, ID).Return(
+func (s *app.AppTestSuite) TestGetUsersError() {
+	s.usersService.On("Get", mock.Anything, app.ID).Return(
 		nil, errors.New("test_error"),
 	)
 
-	req, resp := buildRequestGetUsers(ID)
+	req, resp := buildRequestGetUsers(app.ID)
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusInternalServerError, resp.Code)

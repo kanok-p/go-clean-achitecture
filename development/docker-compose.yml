@@ -3,12 +3,9 @@ services:
   mongoDB:
     image: mongo:3.6
     ports:
-      - 27018:27017
+      - 27017:27017
     volumes:
       - mongo_service_volume:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: touch
-      MONGO_INITDB_ROOT_PASSWORD: secret
     restart: always
 
   simple_jaeger:

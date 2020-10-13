@@ -1,4 +1,4 @@
-package app
+package users
 
 import (
 	"github.com/gin-gonic/gin"
@@ -6,9 +6,9 @@ import (
 	"github.com/kanok-p/go-clean-architecture/domain/response"
 )
 
-func (app *App) DeleteUsers(ctx *gin.Context) {
+func (ctrl *Controller) DeleteUsers(ctx *gin.Context) {
 	id := ctx.Param("id")
-	users, err := app.usrService.Delete(ctx, id)
+	users, err := ctrl.service.Delete(ctx, id)
 	if err != nil {
 		response.Error(ctx, err)
 		return

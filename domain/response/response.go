@@ -15,8 +15,8 @@ const (
 )
 
 type APIError struct {
-	Type string
-	Err  error
+	Type string `json:"type"`
+	Err  error  `json:"error"`
 }
 
 func (e APIError) Error() string {
@@ -24,13 +24,13 @@ func (e APIError) Error() string {
 }
 
 type ErrorResponse struct {
-	Error string
-	Msg   interface{}
+	Error string      `json:"error"`
+	Msg   interface{} `json:"msg"`
 }
 
 type Success struct {
-	Code string
-	Data interface{}
+	Code string      `json:"code"`
+	Data interface{} `json:"data"`
 }
 
 func Notfound(err error) *APIError {
@@ -74,7 +74,6 @@ func Created(ctx *gin.Context, resp interface{}) {
 		Data: resp,
 	})
 }
-
 
 func Error(ctx *gin.Context, err error) {
 	switch err.(type) {

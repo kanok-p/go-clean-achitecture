@@ -7,17 +7,17 @@ import (
 )
 
 type Users struct {
-	ID           primitive.ObjectID `bson:"_id"`
-	CitizenID    string
-	Email        string
-	Password     string `json:"-"`
-	MobileNumber string
-	FirstName    string
-	LastName     string
-	BirthDate    string
-	Gender       string
-	CreatedAt    int64
-	UpdatedAt    int64
+	ID           primitive.ObjectID `bson:"_id" json:"id"`
+	CitizenID    string             `bson:"citizenID" json:"citizen_id"`
+	Email        string             `bson:"email" json:"email"`
+	Password     string             `bson:"password" json:"-"`
+	MobileNumber string             `bson:"mobileNumber" json:"mobile_number"`
+	FirstName    string             `bson:"firstName" json:"first_name"`
+	LastName     string             `bson:"lastName" json:"last_name"`
+	BirthDate    string             `bson:"birthDate" json:"birth_date"`
+	Gender       string             `bson:"gender" json:"gender"`
+	CreatedAt    int64              `bson:"createdAt" json:"created_at"`
+	UpdatedAt    int64              `bson:"updatedAt" json:"updated_at"`
 }
 
 func Create() *Users {
