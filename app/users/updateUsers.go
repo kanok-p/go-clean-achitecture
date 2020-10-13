@@ -5,9 +5,9 @@ import (
 	"github.com/jinzhu/copier"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/kanok-p/go-clean-architecture/app/inout"
 	"github.com/kanok-p/go-clean-architecture/domain/response"
 	serviceUsr "github.com/kanok-p/go-clean-architecture/service/users"
+	"github.com/kanok-p/go-clean-architecture/service/users/inout"
 )
 
 func (ctrl *Controller) UpdateUsers(ctx *gin.Context) {

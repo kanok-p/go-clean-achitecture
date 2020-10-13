@@ -10,3 +10,4 @@ type User struct {
 	BirthDate    string `json:"birth_date"`
 	Gender       string `json:"gender"`
 }
+

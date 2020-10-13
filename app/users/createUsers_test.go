@@ -10,41 +10,48 @@ import (
 
 	"github.com/stretchr/testify/mock"
 
-	"github.com/kanok-p/go-clean-architecture/app"
-	"github.com/kanok-p/go-clean-architecture/app/inout"
 	serviceUsr "github.com/kanok-p/go-clean-architecture/service/users"
+	"github.com/kanok-p/go-clean-architecture/service/users/inout"
 )
 
-func (s *app.AppTestSuite) TestCreateUsers() {
-
-	s.usersService.On("Create", mock.Anything, &serviceUsr.CreateUsers{
-		CitizenID:    app.CitizenID,
-		Email:        app.Email,
-		Password:     app.Password,
-		MobileNumber: app.MobileNumber,
-		FirstName:    app.FirstName,
-		LastName:     app.LastName,
-		BirthDate:    app.BirthDate,
-		Gender:       app.Gender,
+func (s *UsersTestSuite) TestCreateUsers() {
+	s.service.On("Create", mock.Anything, &serviceUsr.CreateUsers{
+		CitizenID:    CitizenID,
+		Email:        Email,
+		Password:     Password,
+		MobileNumber: MobileNumber,
+		FirstName:    FirstName,
+		LastName:     LastName,
+		BirthDate:    BirthDate,
+		Gender:       Gender,
 	}).Return(func(context.Context, *serviceUsr.CreateUsers) error { return nil })
 
-	req, resp := buildRequestCreateUsers(&app.input)
+	req, resp := buildRequestCreateUsers(&inout.User{
+		CitizenID:    CitizenID,
+		Email:        Email,
+		Password:     Password,
+		MobileNumber: MobileNumber,
+		FirstName:    FirstName,
+		LastName:     LastName,
+		BirthDate:    BirthDate,
+		Gender:       Gender,
+	})
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusCreated, resp.Code)
-	s.usersService.AssertExpectations(s.T())
+	s.service.AssertExpectations(s.T())
 }
 
-func (s *app.AppTestSuite) TestCreateUsersError() {
+func (s *UsersTestSuite) TestCreateUsersError() {
 
-	s.usersService.On("Create", mock.Anything, &serviceUsr.CreateUsers{}).Return(
+	s.service.On("Create", mock.Anything, &serviceUsr.CreateUsers{}).Return(
 		func(context.Context, *serviceUsr.CreateUsers) error { return errors.New("create_users_error") })
 
 	req, resp := buildRequestCreateUsers(&inout.User{})
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusInternalServerError, resp.Code)
-	s.usersService.AssertExpectations(s.T())
+	s.service.AssertExpectations(s.T())
 }
 
 func buildRequestCreateUsers(input *inout.User) (*http.Request, *httptest.ResponseRecorder) {
@@ -58,13 +65,13 @@ func buildRequestCreateUsers(input *inout.User) (*http.Request, *httptest.Respon
 	return req, w
 }
 
-func (s *app.AppTestSuite) TestCreateUsersErrorBadRequest() {
+func (s *UsersTestSuite) TestCreateUsersErrorBadRequest() {
 	input := "test_bad_request"
 	req, resp := buildRequestCreateUsersError(&input)
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusBadRequest, resp.Code)
-	s.usersService.AssertExpectations(s.T())
+	s.service.AssertExpectations(s.T())
 }
 
 func buildRequestCreateUsersError(input *string) (*http.Request, *httptest.ResponseRecorder) {

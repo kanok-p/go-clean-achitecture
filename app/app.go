@@ -9,12 +9,12 @@ import (
 )
 
 type App struct {
-	usrController users.Controller
+	controller users.Controller
 }
 
 func New(usrController users.Controller) *App {
 	return &App{
-		usrController: usrController,
+		controller: usrController,
 	}
 }
 
@@ -22,11 +22,11 @@ func (app *App) Register(router *gin.Engine) *App {
 	router.GET("/health-check", func(c *gin.Context) {
 		c.JSON(http.StatusOK, nil)
 	})
-	router.GET("/users", app.usrController.ListUsers)
-	router.POST("/users", app.usrController.CreateUsers)
-	router.GET("/users/:id", app.usrController.GetUsers)
-	router.PUT("/users/:id", app.usrController.UpdateUsers)
-	router.DELETE("/users/:id", app.usrController.DeleteUsers)
+	router.GET("/users", app.controller.ListUsers)
+	router.POST("/users", app.controller.CreateUsers)
+	router.GET("/users/:id", app.controller.GetUsers)
+	router.PUT("/users/:id", app.controller.UpdateUsers)
+	router.DELETE("/users/:id", app.controller.DeleteUsers)
 
 	return app
 }

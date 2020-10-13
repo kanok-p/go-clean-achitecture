@@ -20,8 +20,8 @@ var reqGetListInput = &request.GetListInput{
 	Search: "",
 }
 
-func (s *app.AppTestSuite) TestListUsers() {
-	s.usersService.On("List", mock.Anything, &request.GetListInput{}).Return(
+func (s *UsersTestSuite) TestListUsers() {
+	s.service.On("List", mock.Anything, &request.GetListInput{}).Return(
 		int64(0), []*domain.Users{}, (error)(nil),
 	)
 
@@ -29,11 +29,11 @@ func (s *app.AppTestSuite) TestListUsers() {
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusOK, resp.Code)
-	s.usersService.AssertExpectations(s.T())
+	s.service.AssertExpectations(s.T())
 }
 
-func (s *app.AppTestSuite) TestListUsersError() {
-	s.usersService.On("List", mock.Anything, &request.GetListInput{}).Return(
+func (s *UsersTestSuite) TestListUsersError() {
+	s.service.On("List", mock.Anything, &request.GetListInput{}).Return(
 		int64(0), nil, errors.New("test_error"),
 	)
 
@@ -41,7 +41,7 @@ func (s *app.AppTestSuite) TestListUsersError() {
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusInternalServerError, resp.Code)
-	s.usersService.AssertExpectations(s.T())
+	s.service.AssertExpectations(s.T())
 }
 
 func buildRequestListUsers(reqList *request.GetListInput) (*http.Request, *httptest.ResponseRecorder) {

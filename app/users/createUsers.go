@@ -4,9 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 
-	"github.com/kanok-p/go-clean-architecture/app/inout"
 	"github.com/kanok-p/go-clean-architecture/domain/response"
 	serviceUsr "github.com/kanok-p/go-clean-architecture/service/users"
+	"github.com/kanok-p/go-clean-architecture/service/users/inout"
 )
 
 func (ctrl *Controller) CreateUsers(ctx *gin.Context) {

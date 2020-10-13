@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -9,8 +8,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+
 const (
-	MongodbEndpoint  = "mongodb://touch:secret@localhost:27017/?authSource=admin"
+	MongodbEndpoint  = "mongodb://localhost:27017"
 	MongodbName      = "go-clean"
 	MongodbCollUsers = "users"
 	TimeZone         = "Asia/Bangkok"
@@ -19,7 +19,6 @@ const (
 func TestGet(t *testing.T) {
 	_ = godotenv.Load("/Users/pop/go-clean-architecture/.env")
 	conf, err := Get()
-	fmt.Println(conf.MongoDBCollUser)
 	require.NoError(t, err)
 	require.Equal(t, MongodbEndpoint, conf.MongoDBEndpoint)
 	require.Equal(t, MongodbName, conf.MongoDBName)
@@ -33,7 +32,7 @@ func TestGetError(t *testing.T) {
 	conf, err := Get()
 	require.Error(t, err)
 	require.Equal(t, &Config{
-		MongoDBEndpoint: "mongodb://touch:secret@localhost:27017/?authSource=admin",
+		MongoDBEndpoint: "mongodb://localhost:27017",
 		MongoDBName:     "",
 		MongoDBCollUser: "",
 		TimeZone:        "",

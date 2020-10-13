@@ -9,32 +9,31 @@ import (
 
 	"github.com/stretchr/testify/mock"
 
-	"github.com/kanok-p/go-clean-architecture/app"
 	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
-func (s *app.AppTestSuite) TestGetUsers() {
-	s.usersService.On("Get", mock.Anything, app.ID).Return(
+func (s *UsersTestSuite) TestGetUsers() {
+	s.service.On("Get", mock.Anything, ID).Return(
 		&domain.Users{}, (error)(nil),
 	)
 
-	req, resp := buildRequestGetUsers(app.ID)
+	req, resp := buildRequestGetUsers(ID)
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusOK, resp.Code)
-	s.usersService.AssertExpectations(s.T())
+	s.service.AssertExpectations(s.T())
 }
 
-func (s *app.AppTestSuite) TestGetUsersError() {
-	s.usersService.On("Get", mock.Anything, app.ID).Return(
+func (s *UsersTestSuite) TestGetUsersError() {
+	s.service.On("Get", mock.Anything, ID).Return(
 		nil, errors.New("test_error"),
 	)
 
-	req, resp := buildRequestGetUsers(app.ID)
+	req, resp := buildRequestGetUsers(ID)
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusInternalServerError, resp.Code)
-	s.usersService.AssertExpectations(s.T())
+	s.service.AssertExpectations(s.T())
 }
 
 func buildRequestGetUsers(id string) (*http.Request, *httptest.ResponseRecorder) {

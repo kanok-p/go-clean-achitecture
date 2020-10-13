@@ -9,32 +9,31 @@ import (
 
 	"github.com/stretchr/testify/mock"
 
-	"github.com/kanok-p/go-clean-architecture/app"
 	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
-func (s *app.AppTestSuite) TestDeleteUsers() {
-	s.usersService.On("Delete", mock.Anything, app.ID).Return(
+func (s *UsersTestSuite) TestDeleteUsers() {
+	s.service.On("Delete", mock.Anything, ID).Return(
 		&domain.Users{}, (error)(nil),
 	)
 
-	req, resp := buildRequestDeleteUsers(app.ID)
+	req, resp := buildRequestDeleteUsers(ID)
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusOK, resp.Code)
-	s.usersService.AssertExpectations(s.T())
+	s.service.AssertExpectations(s.T())
 }
 
-func (s *app.AppTestSuite) TestDeleteUsersError() {
-	s.usersService.On("Delete", mock.Anything, app.ID).Return(
+func (s *UsersTestSuite) 	TestDeleteUsersError() {
+	s.service.On("Delete", mock.Anything, ID).Return(
 		nil, errors.New("test_error"),
 	)
 
-	req, resp := buildRequestDeleteUsers(app.ID)
+	req, resp := buildRequestDeleteUsers(ID)
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusInternalServerError, resp.Code)
-	s.usersService.AssertExpectations(s.T())
+	s.service.AssertExpectations(s.T())
 }
 
 func buildRequestDeleteUsers(id string) (*http.Request, *httptest.ResponseRecorder) {
