@@ -6,8 +6,8 @@ import (
 
 type Config struct {
 	MongoDBEndpoint string `env:"MONGODB_ENDPOINT" envDefault:"mongodb://localhost:27017"`
-	MongoDBName     string `env:"MONGODB_NAME,required"`
-	MongoDBCollUser string `env:"MONGODB_COLL_USERS,required"`
+	MongoDBName     string `env:"MONGODB_NAME" envDefault:"go-clean"`
+	MongoDBCollUser string `env:"MONGODB_COLL_USERS,required" envDefault:"users"`
 	TimeZone        string `env:"TIMEZONE" envDefault:"Asia/Bangkok"`
 }
 

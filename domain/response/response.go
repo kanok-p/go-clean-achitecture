@@ -118,13 +118,12 @@ func customError(ctx *gin.Context, err error) {
 
 type ListResp struct {
 	Pagination
-	List interface{}
+	List interface{} `json:"list"`
 }
 
 type Pagination struct {
-	Total  int64
-	Page   int64
-	Limit  int64
-	Search string
-	Sort   string
+	Total   int64  `json:"total"`
+	Page    int64  `json:"page"`
+	PerPage int64  `json:"per_page"`
+	Search  string `json:"search"`
 }

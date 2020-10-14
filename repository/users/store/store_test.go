@@ -55,7 +55,7 @@ func (suite *storeUSRSuite) TestNewErrorPingDatabase() {
 	_ = godotenv.Load("/Users/pop/go-clean-architecture/.env")
 	conf, err := config.Get()
 	suite.NoError(err)
-	conf.MongoDBEndpoint = "mongodb://touch:secret1@localhost:27017"
+	conf.MongoDBEndpoint = "mongodb://test:pass@localhost:27017"
 
 	suite.store, err = New(conf)
 	suite.Error(err)

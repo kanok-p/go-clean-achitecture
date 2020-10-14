@@ -9,23 +9,19 @@ import (
 	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
-type test struct {
-	A string
-	B string
-}
-
 func (u USRService) Get(ctx context.Context, input string) (users *domain.Users, err error) {
 	id, err := primitive.ObjectIDFromHex(input)
 	if err != nil {
 		return nil, response.BadRequest(err)
 	}
 	filter := map[string]interface{}{
-		_ID: &id,
+		_ID: id,
 	}
 
-	users, err = u.usrRepo.Get(ctx, filter)
-	if err.Error() == "mongo: no documents in result" {
-		return nil, response.Notfound(err)
+	if users, err = u.usrRepo.Get(ctx, filter); err != nil {
+		if err.Error() == "mongo: no documents in result" {
+			return nil, response.Notfound(err)
+		}
 	}
 
 	return

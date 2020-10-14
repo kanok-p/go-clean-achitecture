@@ -12,7 +12,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	domain "github.com/kanok-p/go-clean-architecture/domain/users"
-	service "github.com/kanok-p/go-clean-architecture/service/users"
 	"github.com/kanok-p/go-clean-architecture/service/users/inout"
 )
 
@@ -20,7 +19,7 @@ func (s *UsersTestSuite) TestUpdateUsers() {
 	objID, err := primitive.ObjectIDFromHex(ID)
 	s.NoError(err)
 
-	s.service.On("Update", mock.Anything, &service.UpdateUsers{
+	s.service.On("Update", mock.Anything, &inout.Update{
 		ID:           &objID,
 		CitizenID:    CitizenID,
 		Email:        Email,
@@ -31,7 +30,7 @@ func (s *UsersTestSuite) TestUpdateUsers() {
 		Gender:       Gender,
 	}).Return(&domain.Users{}, nil)
 
-	req, resp := buildRequestUpdateUsers(&inout.User{
+	req, resp := buildRequestUpdateUsers(&inout.Create{
 		CitizenID:    CitizenID,
 		Email:        Email,
 		Password:     Password,
@@ -51,7 +50,7 @@ func (s *UsersTestSuite) TestUpdateUsersError() {
 	objID, err := primitive.ObjectIDFromHex(ID)
 	s.NoError(err)
 
-	s.service.On("Update", mock.Anything, &service.UpdateUsers{
+	s.service.On("Update", mock.Anything, &inout.Update{
 		ID:           &objID,
 		CitizenID:    CitizenID,
 		Email:        Email,
@@ -62,7 +61,7 @@ func (s *UsersTestSuite) TestUpdateUsersError() {
 		Gender:       Gender,
 	}).Return(&domain.Users{}, errors.New("create_users_error"))
 
-	req, resp := buildRequestUpdateUsers(&inout.User{
+	req, resp := buildRequestUpdateUsers(&inout.Create{
 		CitizenID:    CitizenID,
 		Email:        Email,
 		Password:     Password,
@@ -78,7 +77,7 @@ func (s *UsersTestSuite) TestUpdateUsersError() {
 	s.service.AssertExpectations(s.T())
 }
 
-func buildRequestUpdateUsers(input *inout.User) (*http.Request, *httptest.ResponseRecorder) {
+func buildRequestUpdateUsers(input *inout.Create) (*http.Request, *httptest.ResponseRecorder) {
 	var req *http.Request
 	w := httptest.NewRecorder()
 

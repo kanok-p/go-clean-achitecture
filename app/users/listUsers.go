@@ -10,15 +10,10 @@ import (
 )
 
 func (ctrl *Controller) ListUsers(ctx *gin.Context) {
-	input := &request.GetListInput{}
+	input := &request.PageOption{}
 	if err := ctx.ShouldBind(input); err != nil {
 		response.Error(ctx, response.BadRequest(err))
 		return
-	}
-
-	input.Limit = input.GetLimit()
-	if input.Offset == 0 {
-		input.Offset = input.GetOffset()
 	}
 
 	total, list, err := ctrl.service.List(ctx, input)
@@ -29,11 +24,10 @@ func (ctrl *Controller) ListUsers(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &response.ListResp{
 		Pagination: response.Pagination{
-			Total:  total,
-			Page:   input.GetPage(),
-			Limit:  input.Limit,
-			Search: input.Search,
-			Sort:   "",
+			Total:   total,
+			Page:    input.Page,
+			PerPage: input.PerPage,
+			Search:  input.Search,
 		},
 		List: list,
 	})

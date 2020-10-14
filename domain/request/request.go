@@ -1,11 +1,8 @@
 package request
 
-import "github.com/kanok-p/go-clean-architecture/util/pagination"
 
-type GetListInput struct {
-	*pagination.Pagination
-	Limit  int64
-	Page   int64
-	Offset int64
-	Search string
+type PageOption struct {
+	Page    int64  `form:"page" binding:"min=0"`
+	PerPage int64  `form:"per_page" binding:"min=0"`
+	Search  string `form:"search"`
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"reflect"
 
+	"github.com/iancoleman/strcase"
 	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/kanok-p/go-clean-architecture/domain/request"
@@ -11,9 +12,9 @@ import (
 	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
-func (u USRService) List(ctx context.Context, input *request.GetListInput) (int64, []*domain.Users, error) {
+func (u USRService) List(ctx context.Context, input *request.PageOption) (int64, []*domain.Users, error) {
 	filter := makeFilter(domain.Users{}, input.Search)
-	total, list, err := u.usrRepo.List(ctx, input.Offset, input.Limit, filter)
+	total, list, err := u.usrRepo.List(ctx, makeOffset(input.Page, input.PerPage), input.PerPage, filter)
 	if err != nil {
 		return total, nil, response.InternalServerError(err)
 	}
@@ -29,7 +30,7 @@ func makeFilter(structure interface{}, search string) (filter bson.M) {
 	var keys []string
 	userStruct := reflect.Indirect(reflect.ValueOf(structure))
 	for i := 0; i < (userStruct.NumField() - 1); i++ {
-		keys = append(keys, userStruct.Type().Field(i).Name)
+		keys = append(keys, strcase.ToLowerCamel(userStruct.Type().Field(i).Name))
 	}
 
 	slFilter := bson.A{}
@@ -47,4 +48,8 @@ func makeFilter(structure interface{}, search string) (filter bson.M) {
 	}
 
 	return filter
+}
+
+func makeOffset(page, perPage int64) (skip int64) {
+	return (page - 1) * perPage
 }

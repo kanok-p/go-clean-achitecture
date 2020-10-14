@@ -7,27 +7,16 @@ import (
 
 	"github.com/kanok-p/go-clean-architecture/domain/response"
 	domain "github.com/kanok-p/go-clean-architecture/domain/users"
+	"github.com/kanok-p/go-clean-architecture/service/users/inout"
 	"github.com/kanok-p/go-clean-architecture/util/password"
 )
 
-type CreateUsers struct {
-	CitizenID    string `validate:"required,unique"`
-	Email        string `validate:"required,email,unique"`
-	Password     string `json:"-" validate:"required,password-format,min=8,max=256"`
-	MobileNumber string `validate:"required,unique"`
-	FirstName    string
-	LastName     string
-	BirthDate    string `validate:"omitempty,date-format=2006-01-02"`
-	Gender       string
-	CreatedAt    *int64
-	UpdatedAt    *int64
-}
-
-func (u USRService) Create(ctx context.Context, input *CreateUsers) (err error) {
+func (u USRService) Create(ctx context.Context, input *inout.Create) (err error) {
 	users := domain.Create()
 	if err = copier.Copy(users, &input); err != nil {
 		return response.InternalServerError(err)
 	}
+
 	_ = copier.Copy(input, users)
 	if users.Password, err = password.Encrypt(input.Password); err != nil {
 		return response.Validate(err)

@@ -10,12 +10,11 @@ import (
 
 	"github.com/stretchr/testify/mock"
 
-	serviceUsr "github.com/kanok-p/go-clean-architecture/service/users"
 	"github.com/kanok-p/go-clean-architecture/service/users/inout"
 )
 
 func (s *UsersTestSuite) TestCreateUsers() {
-	s.service.On("Create", mock.Anything, &serviceUsr.CreateUsers{
+	s.service.On("Create", mock.Anything, &inout.Create{
 		CitizenID:    CitizenID,
 		Email:        Email,
 		Password:     Password,
@@ -24,9 +23,9 @@ func (s *UsersTestSuite) TestCreateUsers() {
 		LastName:     LastName,
 		BirthDate:    BirthDate,
 		Gender:       Gender,
-	}).Return(func(context.Context, *serviceUsr.CreateUsers) error { return nil })
+	}).Return(func(context.Context, *inout.Create) error { return nil })
 
-	req, resp := buildRequestCreateUsers(&inout.User{
+	req, resp := buildRequestCreateUsers(&inout.Create{
 		CitizenID:    CitizenID,
 		Email:        Email,
 		Password:     Password,
@@ -44,17 +43,17 @@ func (s *UsersTestSuite) TestCreateUsers() {
 
 func (s *UsersTestSuite) TestCreateUsersError() {
 
-	s.service.On("Create", mock.Anything, &serviceUsr.CreateUsers{}).Return(
-		func(context.Context, *serviceUsr.CreateUsers) error { return errors.New("create_users_error") })
+	s.service.On("Create", mock.Anything, &inout.Create{}).Return(
+		func(context.Context, *inout.Create) error { return errors.New("create_users_error") })
 
-	req, resp := buildRequestCreateUsers(&inout.User{})
+	req, resp := buildRequestCreateUsers(&inout.Create{})
 	s.router.ServeHTTP(resp, req)
 
 	s.Equal(http.StatusInternalServerError, resp.Code)
 	s.service.AssertExpectations(s.T())
 }
 
-func buildRequestCreateUsers(input *inout.User) (*http.Request, *httptest.ResponseRecorder) {
+func buildRequestCreateUsers(input *inout.Create) (*http.Request, *httptest.ResponseRecorder) {
 	var req *http.Request
 	w := httptest.NewRecorder()
 

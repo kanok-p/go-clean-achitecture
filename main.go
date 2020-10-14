@@ -13,6 +13,7 @@ const (
 )
 
 func main() {
+
 	conf, err := config.Get()
 	if err != nil {
 		log.Fatal(err)
@@ -20,7 +21,6 @@ func main() {
 
 	router := gin.New()
 	router.Use(gin.Recovery())
-
 	_ = newApp(conf).Register(router)
 
 	_ = router.Run(port)

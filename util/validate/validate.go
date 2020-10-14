@@ -5,10 +5,13 @@ import (
 	"regexp"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/iancoleman/strcase"
 	"github.com/uniplaces/carbon"
+	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/kanok-p/go-clean-architecture/config"
 	"github.com/kanok-p/go-clean-architecture/repository/users"
+	"github.com/kanok-p/go-clean-architecture/service/users/inout"
 )
 
 //go:generate mockery --name=Validator
@@ -33,6 +36,7 @@ func New(repo users.Repository, config *config.Config, formats ...map[string][]s
 func (vld VLDService) Validate(ctx context.Context, params interface{}) error {
 	validate := validator.New()
 	_ = validate.RegisterValidation("unique", vld.unique(ctx))
+	_ = validate.RegisterValidation("unique-update", vld.uniqueUpdate(ctx, params))
 	_ = validate.RegisterValidation("date-format", vld.isDateFormat())
 	_ = validate.RegisterValidation("password-format", vld.format(vld.getFormat("password")))
 	err := validate.Struct(params)
@@ -47,9 +51,27 @@ func (vld VLDService) getFormat(name string) []string {
 func (vld VLDService) unique(ctx context.Context) validator.Func {
 	return func(fl validator.FieldLevel) bool {
 		value := fl.Field().Interface()
-		field := fl.StructFieldName()
+		field := strcase.ToLowerCamel(fl.StructFieldName())
 		filter := map[string]interface{}{
 			field: value,
+		}
+		_, err := vld.usrRepo.Get(ctx, filter)
+		if err != nil {
+			return true
+		}
+
+		return false
+	}
+}
+
+func (vld VLDService) uniqueUpdate(ctx context.Context, params interface{}) validator.Func {
+	return func(fl validator.FieldLevel) bool {
+		input := params.(*inout.Update)
+		value := fl.Field().Interface()
+		field := strcase.ToLowerCamel(fl.StructFieldName())
+		filter := map[string]interface{}{
+			field: value,
+			"_id": bson.M{"$ne": input.ID},
 		}
 		_, err := vld.usrRepo.Get(ctx, filter)
 		if err != nil {

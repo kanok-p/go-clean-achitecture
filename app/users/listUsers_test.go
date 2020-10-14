@@ -13,15 +13,14 @@ import (
 	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 )
 
-var reqGetListInput = &request.GetListInput{
-	Limit:  0,
+var reqGetListInput = &request.PageOption{
 	Page:   1,
-	Offset: 0,
+	PerPage:  0,
 	Search: "",
 }
 
 func (s *UsersTestSuite) TestListUsers() {
-	s.service.On("List", mock.Anything, &request.GetListInput{}).Return(
+	s.service.On("List", mock.Anything, &request.PageOption{}).Return(
 		int64(0), []*domain.Users{}, (error)(nil),
 	)
 
@@ -33,7 +32,7 @@ func (s *UsersTestSuite) TestListUsers() {
 }
 
 func (s *UsersTestSuite) TestListUsersError() {
-	s.service.On("List", mock.Anything, &request.GetListInput{}).Return(
+	s.service.On("List", mock.Anything, &request.PageOption{}).Return(
 		int64(0), nil, errors.New("test_error"),
 	)
 
@@ -44,7 +43,7 @@ func (s *UsersTestSuite) TestListUsersError() {
 	s.service.AssertExpectations(s.T())
 }
 
-func buildRequestListUsers(reqList *request.GetListInput) (*http.Request, *httptest.ResponseRecorder) {
+func buildRequestListUsers(reqList *request.PageOption) (*http.Request, *httptest.ResponseRecorder) {
 	var req *http.Request
 	w := httptest.NewRecorder()
 

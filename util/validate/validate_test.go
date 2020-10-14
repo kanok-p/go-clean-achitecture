@@ -70,9 +70,9 @@ func (suite *VLDSuite) TestNew() {
 	suite.NotEqual(nil, suite.validator)
 }
 
-var ValidateEmail = map[string]interface{}{"Email": testValidateSuccess.Email}
-var ValidateCitizenID = map[string]interface{}{"CitizenID": testValidateSuccess.CitizenID}
-var ValidateMobileNumber = map[string]interface{}{"MobileNumber": testValidateSuccess.MobileNumber}
+var ValidateEmail = map[string]interface{}{"email": testValidateSuccess.Email}
+var ValidateCitizenID = map[string]interface{}{"citizenID": testValidateSuccess.CitizenID}
+var ValidateMobileNumber = map[string]interface{}{"mobileNumber": testValidateSuccess.MobileNumber}
 
 func (suite *VLDSuite) TestValidateSuccess() {
 	suite.usrRepo.On("Get", context.Background(), ValidateCitizenID).Once().Return(&domain.Users{}, errors.New("no documents in mongo"))

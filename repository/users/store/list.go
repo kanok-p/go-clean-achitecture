@@ -15,7 +15,7 @@ func (s *Store) List(ctx context.Context, offset, limit int64, filter bson.M) (i
 		return total, nil, err
 	}
 
-	cursor, err := s.collection().Find(ctx, filter, options.Find().SetLimit(limit).SetSkip(offset))
+	cursor, err := s.collection().Find(ctx, filter, options.Find().SetLimit(limit).SetSkip(offset).SetSort(bson.M{"createdAt": -1}))
 	if err != nil {
 		return total, nil, err
 	}

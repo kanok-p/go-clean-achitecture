@@ -2,11 +2,9 @@ package users
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/copier"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/kanok-p/go-clean-architecture/domain/response"
-	serviceUsr "github.com/kanok-p/go-clean-architecture/service/users"
 	"github.com/kanok-p/go-clean-architecture/service/users/inout"
 )
 
@@ -17,24 +15,18 @@ func (ctrl *Controller) UpdateUsers(ctx *gin.Context) {
 		return
 	}
 
-	input := inout.User{}
+	input := &inout.Update{}
 	if err := ctx.ShouldBind(&input); err != nil {
 		response.Error(ctx, response.BadRequest(err))
 		return
 	}
 
-	users := &serviceUsr.UpdateUsers{}
-	if err := copier.Copy(users, &input); err != nil {
-		response.Error(ctx, response.InternalServerError(err))
-		return
-	}
-	users.ID = &id
-
-	usersResp, err := ctrl.service.Update(ctx, users)
+	input.ID = &id
+	user, err := ctrl.service.Update(ctx, input)
 	if err != nil {
 		response.Error(ctx, err)
 		return
 	}
 
-	response.OK(ctx, usersResp)
+	response.OK(ctx, user)
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/kanok-p/go-clean-architecture/domain/request"
 	domain "github.com/kanok-p/go-clean-architecture/domain/users"
 	"github.com/kanok-p/go-clean-architecture/repository/users"
+	"github.com/kanok-p/go-clean-architecture/service/users/inout"
 	"github.com/kanok-p/go-clean-architecture/util/validate"
 )
 
@@ -15,10 +16,10 @@ const (
 
 //go:generate mockery --name=Service
 type Service interface {
-	List(ctx context.Context, input *request.GetListInput) (int64, []*domain.Users, error)
-	Create(ctx context.Context, input *CreateUsers) error
+	List(ctx context.Context, input *request.PageOption) (int64, []*domain.Users, error)
+	Create(ctx context.Context, input *inout.Create) error
 	Get(ctx context.Context, input string) (*domain.Users, error)
-	Update(ctx context.Context, input *UpdateUsers) (*domain.Users, error)
+	Update(ctx context.Context, input *inout.Update) (*domain.Users, error)
 	Delete(ctx context.Context, input string) (*domain.Users, error)
 }
 
